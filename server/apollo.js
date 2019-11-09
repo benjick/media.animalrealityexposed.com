@@ -41,7 +41,7 @@ const typeDefs = gql`
     updatedAt: String!
     date: String!
     tags: [Tag!]!
-    event: Event!
+    event: Event
     owner: User!
     url: String!
   }
@@ -73,6 +73,9 @@ const resolvers = {
   Media: {
     tags: (parent, args, ctx, info) => {
       return ctx.prisma.media({ id: parent.id }).tags()
+    },
+    event: (parent, args, ctx, info) => {
+      return ctx.prisma.media({ id: parent.id }).event()
     }
   }
 }
