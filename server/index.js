@@ -2,52 +2,10 @@ const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
-const { ApolloServer, gql } = require('apollo-server-express')
 const config = require('../nuxt.config.js')
-const { prisma } = require('../generated/prisma')
 const AuthService = require('./AuthService')
+const server = require('./apollo')
 
-const typeDefs = gql`
-  type Query {
-    users: [User!]!
-    events: [Event!]!
-  }
-
-  type User {
-    id: ID!
-    name: String!
-    events: [Event!]!
-  }
-
-  type Event {
-    id: ID!
-    name: String!
-    createdAt: String!
-    updatedAt: String!
-    date: String!
-    owner: User!
-  }
-`
-
-// Provide resolver functions for your schema fields
-const resolvers = {
-  Query: {
-    users: (parent, args, ctx, info) => {
-      return ctx.prisma.users({}, `{id name events}`)
-    },
-    events: (parent, args, ctx, info) => {
-      return ctx.prisma.events({}, `{id name date owner}`)
-    }
-  }
-}
-
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  context: ({ req }) => {
-    return { prisma }
-  }
-})
 server.applyMiddleware({ app })
 
 config.dev = process.env.NODE_ENV !== 'production'
@@ -69,13 +27,7 @@ async function start() {
       res.status(400).send('Could not login')
     }
   })
-  // app.get('/api/auth/logout', function(req, res) {
-  //   res.send('Logout')
-  // })
 
-  // app.get('/user', function(req, res) {
-  //   res.send('Birds home page')
-  // })
   const nuxt = new Nuxt(config)
 
   const { host, port } = nuxt.options.server

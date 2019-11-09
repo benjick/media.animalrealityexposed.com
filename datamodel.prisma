@@ -14,6 +14,7 @@ type Event {
   updatedAt: DateTime! @updatedAt
   date: DateTime!
   owner: User! @relation(link: INLINE)
+  media: [Media!]!
 }
 
 type Tag {
