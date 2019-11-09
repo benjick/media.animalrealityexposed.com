@@ -3,15 +3,27 @@ const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
 const config = require('../nuxt.config.js')
+const AuthService = require('./AuthService')
 
 config.dev = process.env.NODE_ENV !== 'production'
 
 async function start() {
-  // app.post('/api/auth/login', function(req, res) {
-  //   console.log(req.body)
-  //   res.send('Birds home page')
-  // })
+  app.use(express.json())
 
+  app.get('/api/adduser', async function(req, res) {
+    const result = await AuthService.SignUp('max@malm.me', 'test', 'Max Malm')
+    res.json(result)
+  })
+
+  app.post('/api/auth/login', async function(req, res) {
+    const { username, password } = req.body
+    try {
+      const result = await AuthService.Login(username, password)
+      res.json(result)
+    } catch (error) {
+      res.status(400).send('Could not login')
+    }
+  })
   // app.get('/api/auth/logout', function(req, res) {
   //   res.send('Logout')
   // })

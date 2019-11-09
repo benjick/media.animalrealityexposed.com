@@ -29,12 +29,16 @@
       <template slot="end">
         <b-navbar-item tag="div">
           <div class="buttons">
-            <nuxt-link class="button is-primary" to="/sign-up">
-              <strong>Sign up</strong>
-            </nuxt-link>
-            <nuxt-link class="button is-light" to="/login">
+            <nuxt-link
+              v-if="!isAuthenticated"
+              class="button is-light"
+              to="/login"
+            >
               Log in
             </nuxt-link>
+            <b-button v-else class="button is-light" @click="logout">
+              Log out
+            </b-button>
           </div>
         </b-navbar-item>
       </template>
@@ -44,6 +48,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data() {
     return {
@@ -59,6 +65,14 @@ export default {
           to: { name: 'inspire' }
         }
       ]
+    }
+  },
+  computed: {
+    ...mapGetters(['isAuthenticated', 'loggedInUser'])
+  },
+  methods: {
+    logout() {
+      this.$auth.logout()
     }
   }
 }

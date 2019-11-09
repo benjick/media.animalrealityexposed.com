@@ -46,8 +46,8 @@ module.exports = {
             method: 'post',
             propertyName: 'token'
           },
-          logout: { url: '/api/auth/logout', method: 'post' },
-          user: { url: '/api/auth/user', method: 'get', propertyName: 'user' }
+          user: false,
+          logout: false
         }
         // tokenRequired: true,
         // tokenType: 'bearer'
