@@ -5,6 +5,7 @@ type User {
   password: String!
   salt: String!
   events: [Event!]!
+  media: [Media!]!
 }
 
 type Event {
@@ -33,6 +34,8 @@ type Media {
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
   date: DateTime!
-  tags: [Tag!]!
-  event: Event!
+  tags: [Tag!]! @relation(link: TABLE)
+  event: Event @relation(link: INLINE)
+  owner: User! @relation(link: INLINE)
+  url: String!
 }

@@ -11,6 +11,7 @@ const typeDefs = gql`
     id: ID!
     name: String!
     events: [Event!]!
+    media: [Media!]!
   }
 
   type Event {
@@ -20,6 +21,29 @@ const typeDefs = gql`
     updatedAt: String!
     date: String!
     owner: User!
+    media: [Media!]!
+  }
+
+  type Tag {
+    id: ID!
+    name: String!
+    media: [Media!]!
+  }
+
+  enum MediaTypes {
+    IMAGE
+  }
+
+  type Media {
+    id: ID!
+    type: MediaTypes
+    createdAt: String!
+    updatedAt: String!
+    date: String!
+    tags: [Tag!]!
+    event: Event!
+    owner: User!
+    url: String!
   }
 `
 
@@ -35,12 +59,20 @@ const resolvers = {
   },
   User: {
     events: (parent, args, ctx, info) => {
-      return ctx.prisma.user({ id: parent.id }, `{id name date}`).events()
+      return ctx.prisma.user({ id: parent.id }).events()
+    },
+    media: (parent, args, ctx, info) => {
+      return ctx.prisma.user({ id: parent.id }).media()
     }
   },
   Event: {
     owner: (parent, args, ctx, info) => {
-      return ctx.prisma.event({ id: parent.id }, `{id name}`).owner()
+      return ctx.prisma.event({ id: parent.id }).owner()
+    }
+  },
+  Media: {
+    tags: (parent, args, ctx, info) => {
+      return ctx.prisma.media({ id: parent.id }).tags()
     }
   }
 }
