@@ -1,7 +1,7 @@
 const argon2 = require('argon2')
 const randomBytes = require('randombytes')
 const jwt = require('jsonwebtoken')
-const { prisma } = require('./generated/prisma-client')
+const { prisma } = require('../generated/prisma')
 
 function generateToken(user) {
   const data = {

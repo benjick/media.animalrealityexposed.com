@@ -4,4 +4,34 @@ type User {
   name: String
   password: String!
   salt: String!
+  events: [Event!]!
+}
+
+type Event {
+  id: ID! @id
+  name: String!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  date: DateTime!
+  owner: User! @relation(link: INLINE)
+}
+
+type Tag {
+  id: ID! @id
+  name: String!
+  media: [Media!]!
+}
+
+enum MediaTypes {
+  IMAGE
+}
+
+type Media {
+  id: ID! @id,
+  type: MediaTypes
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  date: DateTime!
+  tags: [Tag!]!
+  event: Event!
 }

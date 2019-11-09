@@ -2,8 +2,53 @@ const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
+const { ApolloServer, gql } = require('apollo-server-express')
 const config = require('../nuxt.config.js')
+const { prisma } = require('../generated/prisma')
 const AuthService = require('./AuthService')
+
+const typeDefs = gql`
+  type Query {
+    users: [User!]!
+    events: [Event!]!
+  }
+
+  type User {
+    id: ID!
+    name: String!
+    events: [Event!]!
+  }
+
+  type Event {
+    id: ID!
+    name: String!
+    createdAt: String!
+    updatedAt: String!
+    date: String!
+    owner: User!
+  }
+`
+
+// Provide resolver functions for your schema fields
+const resolvers = {
+  Query: {
+    users: (parent, args, ctx, info) => {
+      return ctx.prisma.users({}, `{id name events}`)
+    },
+    events: (parent, args, ctx, info) => {
+      return ctx.prisma.events({}, `{id name date owner}`)
+    }
+  }
+}
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: ({ req }) => {
+    return { prisma }
+  }
+})
+server.applyMiddleware({ app })
 
 config.dev = process.env.NODE_ENV !== 'production'
 
@@ -49,7 +94,7 @@ async function start() {
   // Listen the server
   app.listen(port, host)
   consola.ready({
-    message: `Server listening on http://${host}:${port}`,
+    message: `Server listening on http://${host}:${port}. GraphQL: http://${host}:${port}${server.graphqlPath}`,
     badge: true
   })
 }
