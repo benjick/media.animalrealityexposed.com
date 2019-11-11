@@ -12,7 +12,7 @@
             </b-input>
           </b-field>
 
-          <b-button @click="login" type="is-primary">Login</b-button>
+          <b-button type="is-primary" @click="login">Login</b-button>
         </form>
       </card>
     </section>

@@ -16,6 +16,9 @@
         <b-navbar-item tag="nuxt-link" to="/inspire">
           Inspire
         </b-navbar-item>
+        <b-navbar-item tag="nuxt-link" to="/upload">
+          Upload
+        </b-navbar-item>
         <b-navbar-dropdown label="Info">
           <b-navbar-item href="#">
             About
