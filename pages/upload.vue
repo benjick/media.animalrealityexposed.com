@@ -36,6 +36,17 @@
               </option>
             </b-select>
           </b-field>
+          <b-field>
+            <b-select placeholder="Set event" @input="setEvent($event)">
+              <option
+                v-for="option in events"
+                :key="option.id"
+                :value="option.id"
+              >
+                {{ option.name }}
+              </option>
+            </b-select>
+          </b-field>
         </section>
       </div>
     </div>
@@ -44,6 +55,21 @@
         <template slot-scope="props">
           <b-table-column field="preview" label="Preview">
             <img :src="props.row.preview" class="preview" />
+          </b-table-column>
+
+          <b-table-column field="event" label="Event">
+            <b-select placeholder="Set event" v-model="props.row.event">
+              <option :value="undefined">
+                No event
+              </option>
+              <option
+                v-for="option in events"
+                :key="option.id"
+                :value="option.id"
+              >
+                {{ option.name }}
+              </option>
+            </b-select>
           </b-table-column>
 
           <b-table-column field="tags" label="Tags">
@@ -77,6 +103,7 @@
 <script>
 import uuid from 'uuid/v4'
 import allTags from '~/apollo/queries/allTags'
+import latestEvents from '~/apollo/queries/latestEvents'
 
 export default {
   middleware: 'auth',
@@ -92,6 +119,10 @@ export default {
     tags: {
       prefetch: true,
       query: allTags
+    },
+    events: {
+      prefetch: true,
+      query: latestEvents
     }
   },
   methods: {
@@ -121,6 +152,10 @@ export default {
         row.tags.splice(row.tags.indexOf(tagId), 1)
       }
       console.log(rowId, tagId)
+    },
+    setEvent(eventId) {
+      this.checkedRows.forEach((row) => (row.event = eventId))
+      console.log(eventId)
     }
   }
 }
