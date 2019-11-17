@@ -21,4 +21,14 @@ auth.post('/login', async function(req, res) {
   }
 })
 
+auth.post('/signup', async function(req, res) {
+  const { username, password, name } = req.body
+  try {
+    const result = await AuthService.SignUp(username, password, name)
+    res.json(result)
+  } catch (error) {
+    res.status(400).send('Could not login')
+  }
+})
+
 module.exports = auth

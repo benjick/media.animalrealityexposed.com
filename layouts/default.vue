@@ -32,13 +32,14 @@
       <template slot="end">
         <b-navbar-item tag="div">
           <div class="buttons">
-            <nuxt-link
-              v-if="!isAuthenticated"
-              class="button is-light"
-              to="/login"
-            >
-              Log in
-            </nuxt-link>
+            <template v-if="!isAuthenticated">
+              <nuxt-link class="button is-primary" to="/sign-up">
+                Sign up
+              </nuxt-link>
+              <nuxt-link class="button is-light" to="/login">
+                Log in
+              </nuxt-link>
+            </template>
             <b-button v-else class="button is-light" @click="logout">
               Log out
             </b-button>
