@@ -59,8 +59,16 @@ module.exports = {
    */
   modules: [
     // Doc: https://buefy.github.io/#/documentation
-    'nuxt-buefy'
+    'nuxt-buefy',
+    '@nuxtjs/apollo'
   ],
+  apollo: {
+    clientConfigs: {
+      default: {
+        httpEndpoint: 'http://localhost:4466'
+      }
+    }
+  },
   /*
    ** Build configuration
    */
