@@ -8,6 +8,7 @@ const typeDefs = gql`
     events: [Event!]!
     myAlbums: [Album!]!
     tags: [Tag!]!
+    getImage(id: String!): Media!
   }
 
   type User {
@@ -140,6 +141,10 @@ const resolvers = {
     },
     tags: (parent, args, ctx, info) => {
       return ctx.prisma.tags({}, `{id name}`)
+    },
+    getImage: (parent, args, ctx, info) => {
+      console.log('getImage', args)
+      return ctx.prisma.media({ id: args.id })
     }
   },
   User: {
@@ -161,6 +166,12 @@ const resolvers = {
     },
     event: (parent, args, ctx, info) => {
       return ctx.prisma.media({ id: parent.id }).event()
+    },
+    owner: (parent, args, ctx, info) => {
+      return ctx.prisma.media({ id: parent.id }).owner()
+    },
+    album: (parent, args, ctx, info) => {
+      return ctx.prisma.media({ id: parent.id }).album()
     }
   }
 }

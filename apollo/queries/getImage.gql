@@ -1,0 +1,24 @@
+query getImage($id: String!) {
+  getImage(id: $id) {
+    id
+    original
+    resized
+    date
+    owner {
+      name
+      id
+    }
+    album {
+      id
+      name
+    }
+    tags {
+      id
+      name
+    }
+    event {
+      id
+      name
+    }
+  }
+}
