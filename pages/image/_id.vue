@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-image">
         <figure class="image">
-          <img :src="image.original" alt="Uploaded image" />
+          <img :src="image.resized" alt="Uploaded image" />
         </figure>
       </div>
       <div class="card-content">
@@ -32,18 +32,26 @@
                 <b-tag type="is-primary">{{ tag.name }}</b-tag>
               </b-taglist>
             </div>
-            <div class="control">
-              <b-taglist v-if="image.album" attached>
+            <nuxt-link
+              v-if="image.album"
+              class="control"
+              :to="`/album/${image.album.id}`"
+            >
+              <b-taglist attached>
                 <b-tag type="is-dark">album</b-tag>
                 <b-tag type="is-info">{{ image.album.name }}</b-tag>
               </b-taglist>
-            </div>
-            <div class="control">
+            </nuxt-link>
+            <nuxt-link
+              v-if="image.event"
+              class="control"
+              :to="`/event/${image.event.id}`"
+            >
               <b-taglist v-if="image.event" attached>
                 <b-tag type="is-dark">event</b-tag>
                 <b-tag type="is-info">{{ image.event.name }}</b-tag>
               </b-taglist>
-            </div>
+            </nuxt-link>
           </b-field>
           <br />
           <time :datetime="image.date">{{ image.date.split('T')[0] }}</time>

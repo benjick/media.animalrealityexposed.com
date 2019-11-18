@@ -41,10 +41,10 @@ const uploadFile = (buffer, name) => {
 upload.post('/s3', middleware.single('file'), async function(req, res) {
   const filename = uniqid() + path.extname(req.file.originalname)
   const thumbnail = await sharp(req.file.buffer)
-    .resize(200)
+    .resize(400)
     .toBuffer()
   const resized = await sharp(req.file.buffer)
-    .resize(200)
+    .resize(1200)
     .toBuffer()
 
   const results = await Promise.all([
