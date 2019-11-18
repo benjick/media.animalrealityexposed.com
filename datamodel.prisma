@@ -48,5 +48,8 @@ type Media {
   tags: [Tag!]! @relation(link: TABLE)
   event: Event @relation(link: INLINE)
   owner: User! @relation(link: INLINE)
-  url: String!
+  original: String
+  resized: String
+  thumbnail: String
+  album: Album
 }

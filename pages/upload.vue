@@ -62,14 +62,36 @@
       </div>
     </div>
     <section>
+      <b-button type="is-primary" :disabled="data.length < 1" @click="upload"
+        >Upload {{ data.length }} images</b-button
+      >
       <b-table :data="data" :checked-rows.sync="checkedRows" checkable>
         <template slot-scope="props">
           <b-table-column field="preview" label="Preview">
-            <img :src="props.row.preview" class="preview" />
+            <nuxt-link v-if="props.row.uploaded" :to="'/image/' + props.row.id">
+              <img :src="props.row.preview" class="preview" />
+            </nuxt-link>
+            <img v-else :src="props.row.preview" class="preview" />
+          </b-table-column>
+
+          <b-table-column field="status" label="Status">
+            <span v-if="props.row.uploaded">
+              Uploaded
+            </span>
+            <span v-else-if="props.row.uploading">
+              Uploading...
+            </span>
+            <span v-else>
+              Ready to upload
+            </span>
           </b-table-column>
 
           <b-table-column field="album" label="Album">
-            <b-select v-model="props.row.album" placeholder="Set album">
+            <b-select
+              v-model="props.row.album"
+              :disabled="props.row.uploading || props.row.uploaded"
+              placeholder="Set album"
+            >
               <option :value="undefined">
                 No album
               </option>
@@ -84,7 +106,11 @@
           </b-table-column>
 
           <b-table-column field="event" label="Event">
-            <b-select v-model="props.row.event" placeholder="Set event">
+            <b-select
+              v-model="props.row.event"
+              :disabled="props.row.uploading || props.row.uploaded"
+              placeholder="Set event"
+            >
               <option :value="undefined">
                 No event
               </option>
@@ -131,6 +157,7 @@ import uuid from 'uuid/v4'
 import allTags from '~/apollo/queries/allTags'
 import latestEvents from '~/apollo/queries/latestEvents'
 import myAlbums from '~/apollo/queries/myAlbums'
+import uploadMedia from '~/apollo/queries/uploadMedia'
 
 export default {
   middleware: 'auth',
@@ -158,6 +185,34 @@ export default {
     }
   },
   methods: {
+    upload() {
+      this.data.forEach(async (image) => {
+        image.uploading = true
+        const formData = new FormData()
+        formData.append('file', image.file)
+        const imageUpload = await this.$axios.post(
+          '/api/upload/s3',
+          formData,
+          {}
+        )
+        const { tags, event, album } = image
+        const variables = {
+          ...imageUpload.data,
+          tags,
+          event,
+          album
+        }
+        const res = await this.$apollo
+          .mutate({
+            mutation: uploadMedia,
+            variables
+          })
+          .then(({ data }) => data && data.uploadMedia)
+        image.id = res.id
+        image.uploading = false
+        image.uploaded = true
+      })
+    },
     uploadFiles(files) {
       files.forEach((file) => {
         const newFile = {
@@ -166,7 +221,9 @@ export default {
           file,
           tags: [],
           event: null,
-          album: null
+          album: null,
+          uploading: false,
+          uploaded: false
         }
         this.data.push(newFile)
       })

@@ -55,13 +55,23 @@ const typeDefs = gql`
     date: String!
     tags: [Tag!]!
     event: Event
-    album: Album
     owner: User!
-    url: String!
+    original: String
+    resized: String
+    thumbnail: String
+    album: Album
   }
 
   type Mutation {
     authenticateUser(username: String!, password: String!): UserLogin!
+    uploadMedia(
+      tags: [String!]!
+      event: String
+      album: String
+      original: String!
+      resized: String!
+      thumbnail: String!
+    ): Media!
   }
 
   type UserLogin {
@@ -79,6 +89,43 @@ const resolvers = {
       const { username, password } = args
       const result = await AuthService.Login(username, password)
       return result
+    },
+    uploadMedia: (parent, args, ctx, info) => {
+      const owner = ctx.user.data._id
+      if (!owner) {
+        throw new Error('Log in please')
+      }
+      args.owner = {
+        connect: {
+          id: owner
+        }
+      }
+      if (args.event) {
+        args.event = {
+          connect: {
+            id: args.event
+          }
+        }
+      }
+      if (args.album) {
+        args.album = {
+          connect: {
+            id: args.album
+          }
+        }
+      }
+      args.date = '2019-11-18'
+      args.type = 'IMAGE'
+      args.tags = {
+        connect: args.tags.map((tag) => ({
+          id: tag
+        }))
+      }
+      try {
+        return ctx.prisma.createMedia(args)
+      } catch (error) {
+        console.log('error', error)
+      }
     }
   },
   Query: {

@@ -21,7 +21,6 @@ export const actions = {
   },
   async login({ commit }, res) {
     await this.$apolloHelpers.onLogin(res.token, undefined, { expires: 7 })
-    console.log('res', res)
     const token = await this.$apolloHelpers.getToken()
     commit('token', token)
   }

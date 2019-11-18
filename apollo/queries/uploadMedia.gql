@@ -1,0 +1,19 @@
+mutation uploadMedia(
+	$tags: [String!]!
+	$event: String
+  $album: String
+	$original: String!
+	$resized: String!
+	$thumbnail: String!
+) {
+	uploadMedia(
+		tags: $tags
+		event: $event
+    album: $album
+		original: $original
+		resized: $resized
+		thumbnail: $thumbnail
+	) {
+		id
+	}
+}

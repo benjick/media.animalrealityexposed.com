@@ -5,6 +5,7 @@ const app = express()
 const config = require('../nuxt.config.js')
 const server = require('./apollo')
 const auth = require('./auth')
+const upload = require('./upload')
 
 server.applyMiddleware({ app })
 
@@ -14,6 +15,7 @@ async function start() {
   app.use(express.json())
 
   app.use('/api/auth', auth)
+  app.use('/api/upload', upload)
 
   const nuxt = new Nuxt(config)
 
