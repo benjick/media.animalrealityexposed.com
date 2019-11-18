@@ -34,26 +34,8 @@ module.exports = {
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
-    '@nuxtjs/axios',
-    '@nuxtjs/auth'
+    '@nuxtjs/axios'
   ],
-  auth: {
-    strategies: {
-      local: {
-        endpoints: {
-          login: {
-            url: '/api/auth/login',
-            method: 'post',
-            propertyName: 'token'
-          },
-          user: false,
-          logout: false
-        }
-        // tokenRequired: true,
-        // tokenType: 'bearer'
-      }
-    }
-  },
   /*
    ** Nuxt.js modules
    */
@@ -65,7 +47,7 @@ module.exports = {
   apollo: {
     clientConfigs: {
       default: {
-        httpEndpoint: 'http://localhost:4466'
+        httpEndpoint: 'http://localhost:3000/graphql'
       }
     }
   },

@@ -21,6 +21,7 @@
 
 <script>
 import Card from '~/components/Card'
+import authenticateUser from '~/apollo/queries/authenticateUser'
 
 export default {
   name: 'Login',
@@ -30,21 +31,27 @@ export default {
   },
   data() {
     return {
-      username: '',
-      password: '',
+      username: 'max@malm.me',
+      password: 'test',
       error: null
     }
   },
   methods: {
     async login() {
       try {
-        await this.$auth.loginWith('local', {
-          data: {
-            username: this.username,
-            password: this.password
-          }
-        })
+        const res = await this.$apollo
+          .mutate({
+            mutation: authenticateUser,
+            variables: {
+              username: this.username,
+              password: this.password
+            }
+          })
+          .then(({ data }) => data && data.authenticateUser)
+        await this.$store.dispatch('auth/login', res)
+        this.$router.push('/')
       } catch (e) {
+        console.log(e)
         this.$buefy.snackbar.open('Login failed')
       }
     }

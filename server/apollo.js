@@ -1,5 +1,6 @@
 const { ApolloServer, gql } = require('apollo-server-express')
 const { prisma } = require('../generated/prisma')
+const AuthService = require('./AuthService')
 
 const typeDefs = gql`
   type Query {
@@ -45,10 +46,29 @@ const typeDefs = gql`
     owner: User!
     url: String!
   }
+
+  type Mutation {
+    # This mutation takes id and email parameters and responds with a User
+    authenticateUser(username: String!, password: String!): UserLogin
+  }
+
+  type UserLogin {
+    id: ID!
+    email: String!
+    token: String!
+    name: String!
+  }
 `
 
 // Provide resolver functions for your schema fields
 const resolvers = {
+  Mutation: {
+    authenticateUser: async (parent, args, ctx, info) => {
+      const { username, password } = args
+      const result = await AuthService.Login(username, password)
+      return result
+    }
+  },
   Query: {
     users: (parent, args, ctx, info) => {
       return ctx.prisma.users({}, `{id name events}`)

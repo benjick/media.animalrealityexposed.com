@@ -46,10 +46,9 @@ module.exports = {
     }
 
     return {
-      user: {
-        email: userRecord.email,
-        name: userRecord.name
-      },
+      id: userRecord.id,
+      email: userRecord.email,
+      name: userRecord.name,
       token: generateToken(userRecord)
     }
   }

@@ -74,9 +74,12 @@ export default {
   computed: {
     ...mapGetters(['isAuthenticated', 'loggedInUser'])
   },
+  beforeMount() {
+    this.$store.dispatch('auth/init')
+  },
   methods: {
     logout() {
-      this.$auth.logout()
+      this.$store.dispatch('auth/logout')
     }
   }
 }
