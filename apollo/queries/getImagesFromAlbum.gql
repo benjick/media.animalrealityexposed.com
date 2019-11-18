@@ -1,0 +1,15 @@
+query getImagesFromAlbum($id: String!) {
+  getImagesFromAlbum(id: $id) {
+    id
+    name
+    owner {
+      name
+      id
+    }
+    media {
+      id
+      thumbnail
+      original
+    }
+  }
+}
