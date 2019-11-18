@@ -1,5 +1,5 @@
 {
-  events(orderBy: date_DESC, first: 20) {
+  events {
     id
     name
 		date

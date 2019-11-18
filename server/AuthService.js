@@ -3,14 +3,15 @@ const randomBytes = require('randombytes')
 const jwt = require('jsonwebtoken')
 const { prisma } = require('../generated/prisma')
 
+const signature = 'MySuP3R_z3kr3t'
+
 function generateToken(user) {
   const data = {
     _id: user.id,
     name: user.name,
-    email: user.email
+    username: user.username
   }
-  const signature = 'MySuP3R_z3kr3t'
-  const expiration = '6h'
+  const expiration = '7d'
 
   return jwt.sign({ data }, signature, { expiresIn: expiration })
 }
@@ -50,6 +51,16 @@ module.exports = {
       email: userRecord.email,
       name: userRecord.name,
       token: generateToken(userRecord)
+    }
+  },
+  getUser(token) {
+    try {
+      if (token) {
+        return jwt.verify(token, signature)
+      }
+      return null
+    } catch (err) {
+      return null
     }
   }
 }

@@ -47,6 +47,17 @@
               </option>
             </b-select>
           </b-field>
+          <b-field>
+            <b-select placeholder="Set album" @input="setAlbum($event)">
+              <option
+                v-for="option in albums"
+                :key="option.id"
+                :value="option.id"
+              >
+                {{ option.name }}
+              </option>
+            </b-select>
+          </b-field>
         </section>
       </div>
     </div>
@@ -55,6 +66,21 @@
         <template slot-scope="props">
           <b-table-column field="preview" label="Preview">
             <img :src="props.row.preview" class="preview" />
+          </b-table-column>
+
+          <b-table-column field="album" label="Album">
+            <b-select v-model="props.row.album" placeholder="Set album">
+              <option :value="undefined">
+                No album
+              </option>
+              <option
+                v-for="option in albums"
+                :key="option.id"
+                :value="option.id"
+              >
+                {{ option.name }}
+              </option>
+            </b-select>
           </b-table-column>
 
           <b-table-column field="event" label="Event">
@@ -104,6 +130,7 @@
 import uuid from 'uuid/v4'
 import allTags from '~/apollo/queries/allTags'
 import latestEvents from '~/apollo/queries/latestEvents'
+import myAlbums from '~/apollo/queries/myAlbums'
 
 export default {
   middleware: 'auth',
@@ -123,6 +150,11 @@ export default {
     events: {
       prefetch: true,
       query: latestEvents
+    },
+    albums: {
+      prefetch: true,
+      query: myAlbums,
+      update: (data) => data.myAlbums
     }
   },
   methods: {
@@ -133,7 +165,8 @@ export default {
           preview: URL.createObjectURL(file),
           file,
           tags: [],
-          event: null
+          event: null,
+          album: null
         }
         this.data.push(newFile)
       })
@@ -144,18 +177,18 @@ export default {
         tags.push(id)
         row.tags = [...new Set(tags)]
       })
-      console.log(id)
     },
     removeTag(rowId, tagId) {
       const row = this.checkedRows.find((r) => r.id === rowId)
       if (row) {
         row.tags.splice(row.tags.indexOf(tagId), 1)
       }
-      console.log(rowId, tagId)
     },
     setEvent(eventId) {
       this.checkedRows.forEach((row) => (row.event = eventId))
-      console.log(eventId)
+    },
+    setAlbum(albumId) {
+      this.checkedRows.forEach((row) => (row.album = albumId))
     }
   }
 }

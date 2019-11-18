@@ -6,7 +6,18 @@ type User {
   salt: String!
   events: [Event!]!
   media: [Media!]!
+  albums: [Album!]!
 }
+
+type Album {
+  id: ID! @id
+  name: String!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  owner: User! @relation(link: INLINE)
+  media: [Media!]!
+}
+
 
 type Event {
   id: ID! @id

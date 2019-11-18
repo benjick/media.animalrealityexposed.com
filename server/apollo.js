@@ -6,12 +6,24 @@ const typeDefs = gql`
   type Query {
     users: [User!]!
     events: [Event!]!
+    myAlbums: [Album!]!
+    tags: [Tag!]!
   }
 
   type User {
     id: ID!
     name: String!
     events: [Event!]!
+    media: [Media!]!
+    albums: [Album!]!
+  }
+
+  type Album {
+    id: ID!
+    name: String!
+    createdAt: String!
+    updatedAt: String!
+    owner: User!
     media: [Media!]!
   }
 
@@ -43,13 +55,13 @@ const typeDefs = gql`
     date: String!
     tags: [Tag!]!
     event: Event
+    album: Album
     owner: User!
     url: String!
   }
 
   type Mutation {
-    # This mutation takes id and email parameters and responds with a User
-    authenticateUser(username: String!, password: String!): UserLogin
+    authenticateUser(username: String!, password: String!): UserLogin!
   }
 
   type UserLogin {
@@ -70,11 +82,17 @@ const resolvers = {
     }
   },
   Query: {
+    myAlbums: (parent, args, ctx, info) => {
+      return ctx.prisma.user({ id: ctx.user.data._id }).albums()
+    },
     users: (parent, args, ctx, info) => {
       return ctx.prisma.users({}, `{id name events}`)
     },
     events: (parent, args, ctx, info) => {
       return ctx.prisma.events({}, `{id name date owner}`)
+    },
+    tags: (parent, args, ctx, info) => {
+      return ctx.prisma.tags({}, `{id name}`)
     }
   },
   User: {
@@ -104,7 +122,10 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: ({ req }) => {
-    return { prisma }
+    const tokenWithBearer = req.headers.authorization || ''
+    const token = tokenWithBearer.split(' ')[1]
+    const user = AuthService.getUser(token)
+    return { prisma, user }
   }
 })
 

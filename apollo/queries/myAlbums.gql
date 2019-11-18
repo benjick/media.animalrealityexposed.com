@@ -1,0 +1,8 @@
+{
+  myAlbums {
+    id,
+    name,
+    createdAt,
+    updatedAt
+  }
+}
