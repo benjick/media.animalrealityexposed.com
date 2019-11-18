@@ -58,7 +58,7 @@
           </b-table-column>
 
           <b-table-column field="event" label="Event">
-            <b-select placeholder="Set event" v-model="props.row.event">
+            <b-select v-model="props.row.event" placeholder="Set event">
               <option :value="undefined">
                 No event
               </option>
