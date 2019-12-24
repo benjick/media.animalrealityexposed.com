@@ -1,0 +1,15 @@
+query getImagesFromEvent($id: String!) {
+  getImagesFromEvent(id: $id) {
+    id
+    name
+    owner {
+      name
+      id
+    }
+    media {
+      id
+      thumbnail
+      original
+    }
+  }
+}
