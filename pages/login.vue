@@ -4,7 +4,7 @@
       <card title="Login" icon="account">
         <form @submit.prevent="login">
           <b-field label="Email">
-            <b-input v-model="username" type="email" maxlength="30"> </b-input>
+            <b-input v-model="email" type="email" maxlength="30"> </b-input>
           </b-field>
 
           <b-field label="Password">
@@ -31,8 +31,8 @@ export default {
   },
   data() {
     return {
-      username: 'max@malm.me',
-      password: 'test',
+      email: 'max@malm.me',
+      password: 'testpassword',
       error: null
     }
   },
@@ -43,7 +43,7 @@ export default {
           .mutate({
             mutation: authenticateUser,
             variables: {
-              username: this.username,
+              email: this.email,
               password: this.password
             }
           })

@@ -34,24 +34,27 @@ module.exports = {
           name: String!
         }
         """
-        This type describes a product entity.
+        A User is someone who can log in
         """
         type User {
           id: ID!
           email: String!
           name: String!
+          # events: [Event!]!
+          media: [Media!]!
+          # albums: [Album!]!
         }
-      `
-      // resolvers: {
-      //   Product: {
-      //     categories: {
-      //       action: 'categories.get',
-      //       rootParams: {
-      //         categories: 'id'
-      //       }
-      //     }
-      //   }
-      // }
+      `,
+      resolvers: {
+        User: {
+          media: {
+            action: 'media.get',
+            rootParams: {
+              categories: 'id'
+            }
+          }
+        }
+      }
     }
   },
   model: {
@@ -70,13 +73,6 @@ module.exports = {
   },
   actions: {
     signup: {
-      graphql: {
-        query: gql`
-          type Query {
-            authenticateUser(username: String!, password: String!): UserLogin!
-          }
-        `
-      },
       params: {
         email: 'string',
         password: 'string',
@@ -103,6 +99,13 @@ module.exports = {
       }
     },
     login: {
+      graphql: {
+        mutation: gql`
+          type Mutation {
+            authenticateUser(email: String!, password: String!): UserLogin!
+          }
+        `
+      },
       params: {
         email: 'string',
         password: 'string'
