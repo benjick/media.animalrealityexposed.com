@@ -51,6 +51,22 @@ module.exports = {
     }
   },
   actions: {
+    create: {
+      graphql: {
+        mutation: gql`
+          type Mutation {
+            uploadMedia(
+              tags: [String!]!
+              event: String
+              album: String
+              original: String!
+              resized: String!
+              thumbnail: String!
+            ): Media!
+          }
+        `
+      }
+    },
     find: {
       graphql: {
         query: gql`

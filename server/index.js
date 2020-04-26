@@ -1,6 +1,7 @@
 const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
+const proxy = require('http-proxy-middleware')
 const config = require('../nuxt.config.js')
 
 const app = express()
@@ -19,6 +20,11 @@ async function start() {
   } else {
     await nuxt.ready()
   }
+
+  // Proxy requests to Moleculer backend
+  const backend = proxy({ target: 'http://localhost:3001', changeOrigin: true })
+  app.use('/api', backend)
+  app.use('/graphql', backend)
 
   app.use(nuxt.render)
 

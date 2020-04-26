@@ -172,11 +172,13 @@ export default {
   apollo: {
     tags: {
       prefetch: true,
-      query: allTags
+      query: allTags,
+      update: (data) => data.getTags
     },
     events: {
       prefetch: true,
-      query: latestEvents
+      query: latestEvents,
+      update: (data) => data.getEvents
     },
     albums: {
       prefetch: true,
@@ -189,7 +191,8 @@ export default {
       this.data.forEach(async (image) => {
         image.uploading = true
         const formData = new FormData()
-        formData.append('file', image.file)
+        formData.append('myfile', image.file)
+        console.log('image.file', image.file)
         const imageUpload = await this.$axios.post(
           '/api/upload/s3',
           formData,
@@ -202,6 +205,7 @@ export default {
           event,
           album
         }
+        console.log('variables', variables)
         const res = await this.$apollo
           .mutate({
             mutation: uploadMedia,

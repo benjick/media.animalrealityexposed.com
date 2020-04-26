@@ -22,16 +22,16 @@ const api = {
     port: 3001,
     whitelist: ['**'],
     routes: [
+      // Don't forget to add proxies in server/index.js
       { path: '/api', mappingPolicy: 'all' },
       {
-        path: '/upload',
-        authorization: false,
+        path: '/api/upload/s3',
         bodyParsers: {
           json: false,
           urlencoded: false
         },
         aliases: {
-          'FILE /': 'file.save'
+          'POST /': 'multipart:file.save'
         },
         busboyConfig: {
           limits: {

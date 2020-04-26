@@ -51,7 +51,7 @@ export default {
         await this.$store.dispatch('auth/login', res)
         this.$router.push('/')
       } catch (e) {
-        console.log(e)
+        console.log(e) // eslint-disable-line
         this.$buefy.snackbar.open('Login failed')
       }
     }
