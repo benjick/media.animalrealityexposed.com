@@ -32,7 +32,7 @@ export default {
   data() {
     return {
       username: 'max@malm.me',
-      password: 'test',
+      password: 'test123',
       error: null
     }
   },

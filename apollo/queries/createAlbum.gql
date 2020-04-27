@@ -1,0 +1,9 @@
+mutation createAlbum(
+	$name: String!
+) {
+	createAlbum(
+		name: $name
+	) {
+		id
+	}
+}

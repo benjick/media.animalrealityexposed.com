@@ -56,10 +56,11 @@ export default {
   },
   data() {
     return {
+      name: '',
       username: '',
       password: '',
       password2: '',
-      name: '',
+      checkbox: false,
       error: null
     }
   },

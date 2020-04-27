@@ -27,7 +27,7 @@ const typeDefs = gql`
     createdAt: String!
     updatedAt: String!
     owner: User!
-    media: [Media!]!
+    media(first: Int): [Media!]!
   }
 
   type Event {
@@ -75,6 +75,7 @@ const typeDefs = gql`
       resized: String!
       thumbnail: String!
     ): Media!
+    createAlbum(name: String!): Album!
   }
 
   type UserLogin {
@@ -85,7 +86,6 @@ const typeDefs = gql`
   }
 `
 
-// Provide resolver functions for your schema fields
 const resolvers = {
   Mutation: {
     authenticateUser: async (parent, args, ctx, info) => {
@@ -129,6 +129,15 @@ const resolvers = {
       } catch (error) {
         console.log('error', error)
       }
+    },
+    createAlbum: (parent, args, ctx) => {
+      const owner = ctx.user.data._id
+      args.owner = {
+        connect: {
+          id: owner
+        }
+      }
+      return ctx.prisma.createAlbum(args)
     }
   },
   Query: {
@@ -189,7 +198,7 @@ const resolvers = {
       return ctx.prisma.album({ id: parent.id }).owner()
     },
     media: (parent, args, ctx, info) => {
-      return ctx.prisma.album({ id: parent.id }).media()
+      return ctx.prisma.album({ id: parent.id }).media(args)
     }
   }
 }

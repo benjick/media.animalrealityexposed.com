@@ -154,7 +154,7 @@
 
 <script>
 import uuid from 'uuid/v4'
-import allTags from '~/apollo/queries/allTags'
+import getAllTags from '~/apollo/queries/getAllTags'
 import latestEvents from '~/apollo/queries/latestEvents'
 import myAlbums from '~/apollo/queries/myAlbums'
 import uploadMedia from '~/apollo/queries/uploadMedia'
@@ -172,7 +172,7 @@ export default {
   apollo: {
     tags: {
       prefetch: true,
-      query: allTags
+      query: getAllTags
     },
     events: {
       prefetch: true,

@@ -3,6 +3,9 @@
     id,
     name,
     createdAt,
-    updatedAt
+    updatedAt,
+    media(first: 1) {
+      thumbnail
+    }
   }
 }

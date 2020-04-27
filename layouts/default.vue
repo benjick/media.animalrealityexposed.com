@@ -13,8 +13,8 @@
         <b-navbar-item tag="nuxt-link" to="/">
           Home
         </b-navbar-item>
-        <b-navbar-item tag="nuxt-link" to="/inspire">
-          Inspire
+        <b-navbar-item v-if="isAuthenticated" tag="nuxt-link" to="/me/albums">
+          Albums
         </b-navbar-item>
         <b-navbar-item tag="nuxt-link" to="/upload">
           Upload
@@ -40,9 +40,11 @@
                 Log in
               </nuxt-link>
             </template>
-            <b-button v-else class="button is-light" @click="logout">
-              Log out
-            </b-button>
+            <template v-else>
+              <b-button class="button is-light" @click="logout">
+                Log out
+              </b-button>
+            </template>
           </div>
         </b-navbar-item>
       </template>

@@ -9,12 +9,14 @@ require('dotenv').config()
 
 const spacesEndpoint = new aws.Endpoint('fra1.digitaloceanspaces.com')
 const s3 = new aws.S3({
-  endpoint: spacesEndpoint
-})
-aws.config.update({
+  endpoint: spacesEndpoint,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   accessKeyId: process.env.AWS_ACCESS_KEY_ID
 })
+// aws.config.update({
+//   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+//   accessKeyId: process.env.AWS_ACCESS_KEY_ID
+// })
 
 const middleware = multer({
   limits: { fileSize: 1 * 1024 * 1024 * 100 }
