@@ -39,7 +39,7 @@
     "prisma-client-lib": "^1.34.10",
     "randombytes": "^2.1.0",
     "sass-loader": "^8.0.0",
-    "sharp": "^0.23.3",
+    "sharp": "^0.30.5",
     "uniqid": "^5.1.0",
     "uuid": "^3.3.3"
   },
